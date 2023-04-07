@@ -29,10 +29,12 @@ public:
     int resetShape [4][2] = {0, 0, 0, 1, 0, 2, 0, 3};
     bool shapeGrid[4][4] = {0,0,0,0,
                             0,0,0,0,
-                            1,1,1,1,
+                            0,0,0,0,
                             0,0,0,0};
 
     ofFbo shapeFbo;
+    int position[2];
+    int blocker;
 
     int square [4][2] = {0, 0, 1, 0, 0, 1, 1, 1};
     int line[4][2] = {0, 0, 0, 1, 0, 2, 0, 3};

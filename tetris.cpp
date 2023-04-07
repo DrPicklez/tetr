@@ -7,47 +7,37 @@ void Tetris::setup(){
     shapeFbo.allocate(4, 4);
 }
 //--------------------------------------------------------------
+
 void Tetris::rotate(){
-    int min[2]{0, 0};
-    int max[2]{0, 0};
-
-    for(auto block : shape){
-        shapeGrid[block[0]][block[1]] = 1;
+    int i = 0;
+    for(int x = 0; x < 4; x ++){
+        for(int y = 0; y < 4; y ++){
+            cout << shapeGrid[x][y];
+            int xPos = 4-x;
+            int yPos = 4-y;
+            if(shapeGrid[xPos][yPos]){
+                phantomShape[i][0] = x;
+                phantomShape[i][1] = y;
+                i ++;
+            }
+        }
+        cout << endl;
     }
+    cout << "  "  << endl;
 
+    for(int x = 0; x < 4; x ++){
+        for(int y = 0; y < 4; y ++){
+            cout << shapeGrid[x][y];
+//            int xPos = x;
+//            int yPos = y;
+//            if(shapeGrid[xPos][yPos]){
+//                phantomShape[i][0] = xPos;
+//                phantomShape[i][1] = yPos;
+//                i ++;
+            }
+        cout << endl;
+        }
 
-//        if(min[0] < x){
-//           min[0] = x;
-//        }
-
-//        if(min[1] < y){
-//           min[1] = y;
-//        }
-
-//        if(max[0] > x){
-//           max[0] = x;
-//        }
-
-//        if(max[1] > y){
-//           max[1] = y;
-//        }
-//    }
-
-//    for(int i = 0; i < 4; i ++){
-//        int x = shape[i][0];
-//        int y = shape[i][1];
-
-//        shape[i][1] = shape[i][0] + min[0];
-//        shape[i][0] = shape[i][1] + min[1];
-//    }
-//    cout << min[0] << "minX" << endl;
-//    cout << min[1] << "minY" << endl;
-
-//    for(int i = 0; i < 4; i ++){
-//        int x = shape[i][0];
-//        shape[i][0] = x;
-////        shape[i][0] = y;
-//    }
 
 }
 //--------------------------------------------------------------
@@ -64,7 +54,7 @@ bool Tetris::detectCollision(){
 }
 //--------------------------------------------------------------
 void Tetris::update(){
-//    move(TETRIS_MOVE_DOWN);
+    move(TETRIS_MOVE_DOWN);
 }
 //--------------------------------------------------------------
 void Tetris::reset(){
@@ -78,11 +68,16 @@ void Tetris::reset(){
 //--------------------------------------------------------------
 int nShape = 0;
 void Tetris::nextShape(){
+    position[0] = gridX /2;
+    position[1] = 0;
     for(int i = 0; i < 4; i ++){
-        grid[shape[i][0]][shape[i][1]] = 1;
-        shape[i][0] = le[i][0];
-        shape[i][1] = le[i][1];
-        shape[i][0] += (gridX / 2);
+        grid[shape[i][0]][shape[i][1]] = 1; //block to stay
+
+        phantomShape[i][0] = le[i][0];
+        phantomShape[i][1] = le[i][1];
+        shape[i][0] = phantomShape[i][0] + position[0];
+        shape[i][1] = phantomShape[i][1] + position[1];
+        shapeGrid[phantomShape[i][0]][phantomShape[i][1]] = true;
     }
     //nShape ++;
     //nShape = nShape % shapes.size();
@@ -110,19 +105,23 @@ void Tetris::draw(){
     }
 }
 //--------------------------------------------------------------
+
 void Tetris::move(int dir){
 //    cout << dir << endl;
     switch(dir){
     case TETRIS_MOVE_DOWN:
     {
 //        cout << "moving down" << endl;
-        for(auto block : shape){
-            block[1] += 1;  //y
+        position[1] += 1;
+        for(int i = 0; i < 4; i ++){
+            shape[i][1] = phantomShape[i][1] + position[1];  //y
         }
         if(detectCollision()){
-            for(auto block : shape){
-                block[1] -= 1;  //y
+            position[1] -= 1;
+            for(int i = 0; i < 4; i ++){
+                shape[i][1] = phantomShape[i][1] + position[1];  //y
             }
+
             if(detectCollision()){
                 nextShape();
                 reset();
@@ -137,12 +136,14 @@ void Tetris::move(int dir){
     case TETRIS_MOVE_LEFT:
     {
 //        cout << "moving left" << endl;
-        for(auto block : shape){
-            block[0] -= 1;  //y
+        position[0] -= 1;
+        for(int i = 0; i < 4; i ++){
+            shape[i][0] = phantomShape[i][0] + position[0];  //y
         }
         if(detectCollision()){
-            for(auto block : shape){
-                block[0] += 1;  //y
+            position[0] += 1;
+            for(int i = 0; i < 4; i ++){
+                shape[i][0] = phantomShape[i][0] + position[0];  //y
             }
         }
         break;
@@ -150,15 +151,15 @@ void Tetris::move(int dir){
 
     case TETRIS_MOVE_RIGHT:
     {
-//        cout << "moving right" << endl;
-        for(auto block : shape){
-            block[0] += 1;  //y
+        position[0] += 1;
+        for(int i = 0; i < 4; i ++){
+            shape[i][0] = phantomShape[i][0] + position[0];  //y
         }
         if(detectCollision()){
-            for(auto block : shape){
-                block[0] -= 1;  //y
+            position[0] -= 1;
+            for(int i = 0; i < 4; i ++){
+                shape[i][0] = phantomShape[i][0] + position[0];  //y
             }
-//            move(TETRIS_MOVE_LEFT);   //switch use inside switch fucks up
         }
         break;
     }
