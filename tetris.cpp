@@ -1,42 +1,45 @@
 #include "tetris.h"
 //--------------------------------------------------------------
 void Tetris::setup(){
-//    shapes.push_back((int*)&square);
-//    shapes.push_back((int*)&line);
-//    shapes.push_back((int*)&ell);
     shapeFbo.allocate(4, 4);
 }
-//--------------------------------------------------------------
 
+//--------------------------------------------------------------
 void Tetris::rotate(){
     int i = 0;
     for(int x = 0; x < 4; x ++){
         for(int y = 0; y < 4; y ++){
-            cout << shapeGrid[x][y];
-            int xPos = 4-x;
-            int yPos = 4-y;
-            if(shapeGrid[xPos][yPos]){
-                phantomShape[i][0] = x;
-                phantomShape[i][1] = y;
+//            cout << shapeGrid[x][y];
+
+            if(shapeGrid[x][y]){
+                phantomShape[i][0] = 4-x;
+                phantomShape[i][1] = 4-y;
                 i ++;
+                cout << x << "  " << y << endl;
             }
         }
-        cout << endl;
+//        cout << endl;
     }
     cout << "  "  << endl;
+    for(int i = 0; i < 4; i ++){
+        int x = phantomShape[i][0];
+        int y = phantomShape[i][1];
+
+        phantomShape[i][0] = y;
+        phantomShape[i][1] = x;
+    }
 
     for(int x = 0; x < 4; x ++){
         for(int y = 0; y < 4; y ++){
-            cout << shapeGrid[x][y];
-//            int xPos = x;
-//            int yPos = y;
-//            if(shapeGrid[xPos][yPos]){
-//                phantomShape[i][0] = xPos;
-//                phantomShape[i][1] = yPos;
-//                i ++;
-            }
-        cout << endl;
+            shapeGrid[x][y] = false;
         }
+    }
+
+    for(int i = 0; i < 4; i ++){
+        shape[i][0] = phantomShape[i][0] + position[0];
+        shape[i][1] = phantomShape[i][1] + position[1];
+        shapeGrid[phantomShape[i][0]][phantomShape[i][1]] = true;
+    }
 
 
 }
@@ -75,6 +78,7 @@ void Tetris::nextShape(){
 
         phantomShape[i][0] = le[i][0];
         phantomShape[i][1] = le[i][1];
+
         shape[i][0] = phantomShape[i][0] + position[0];
         shape[i][1] = phantomShape[i][1] + position[1];
         shapeGrid[phantomShape[i][0]][phantomShape[i][1]] = true;
