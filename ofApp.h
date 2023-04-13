@@ -23,5 +23,6 @@ public:
     void gotMessage(ofMessage msg);
 
     Tetris tetris;
+    bool controlBlock = 0;
 
 };

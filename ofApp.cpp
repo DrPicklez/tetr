@@ -9,9 +9,11 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 uint64_t times = 0;
 void ofApp::update(){
-    if(ofGetElapsedTimeMillis() > times + 100){
-        times = ofGetElapsedTimeMillis();
-        tetris.update();
+    if(!controlBlock){
+        if(ofGetElapsedTimeMillis() > times + 100){
+            times = ofGetElapsedTimeMillis();
+            tetris.update();
+        }
     }
 }
 
@@ -23,7 +25,7 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    controlBlock = 1;
     if(key == OF_KEY_LEFT){
         tetris.move(TETRIS_MOVE_LEFT);
     }
@@ -31,10 +33,9 @@ void ofApp::keyPressed(int key){
         tetris.move(TETRIS_MOVE_RIGHT);
     }
     else if(key == OF_KEY_UP){
-//        if(!tetris.blocker){
         tetris.rotate();
-//        }
     }
+    controlBlock = 0;
 
 }
 
