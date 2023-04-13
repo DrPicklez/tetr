@@ -8,12 +8,10 @@ void Tetris::setup(){
 
 //--------------------------------------------------------------
 void Tetris::rotate(){
-    /* rotate shape, use a box of 5 wide,
-     * 90^ flip x / y
-     * then - centrepoint of 5 (3)
-     * ???????????????????????
-    */
+    int colShape[4][2];
     for(int i = 0; i < 4; i ++){
+        colShape[i][0] = phantomShape[i][0];
+        colShape[i][1] = phantomShape[i][1];
         int xA = phantomShape[i][0];
         int yA = phantomShape[i][1];
         phantomShape[i][1] = xA;
@@ -21,52 +19,14 @@ void Tetris::rotate(){
         shape[i][0] = phantomShape[i][0] + position[0];
         shape[i][1] = phantomShape[i][1] + position[1];
     }
-
-    /*
-    bool shapeGrid[4][4] = {0,0,0,0,
-                            0,0,0,0,
-                            0,0,0,0,
-                            0,0,0,0};
-
-    for( int i = 0; i < 4; i ++){
-        shapeGrid[phantomShape[i][0]][phantomShape[i][1]] = 1;
-    }
-
-    //backward---------------------------------------
-    int i = 0;
-    for(int x = 0; x < 4; x ++){
-        for(int y = 0; y < 4; y ++){
-            if(shapeGrid[x][y]){
-                phantomShape[i][1] = 4-x;
-                phantomShape[i][0] = 4-y;
-                i ++;
-                cout << x << "  " << y << endl;
-            }
+    if(detectCollision()){
+        for(int i = 0; i < 4; i ++){
+            phantomShape[i][0] = colShape[i][0];
+            phantomShape[i][1] = colShape[i][1];
+            shape[i][0] = phantomShape[i][0] + position[0];
+            shape[i][1] = phantomShape[i][1] + position[1];
         }
     }
-    //flip---------------------------------------
-    cout << "  "  << endl;
-    for(int i = 0; i < 4; i ++){
-        int x = phantomShape[i][0];
-        int y = phantomShape[i][1];
-
-        phantomShape[i][0] = y;
-        phantomShape[i][1] = x;
-    }
-
-    for(int x = 0; x < 4; x ++){
-        for(int y = 0; y < 4; y ++){
-            shapeGrid[x][y] = false;
-        }
-    }
-
-    for(int i = 0; i < 4; i ++){
-        shape[i][0] = phantomShape[i][0] + position[0];
-        shape[i][1] = phantomShape[i][1] + position[1];
-        shapeGrid[phantomShape[i][0]][phantomShape[i][1]] = true;
-    }
-
-*/
 }
 //--------------------------------------------------------------
 bool Tetris::detectCollision(){
@@ -94,13 +54,40 @@ void Tetris::reset(){
 }
 
 //--------------------------------------------------------------
+void Tetris::sitShape(){
+    for(int i = 0; i < 4; i ++){
+        grid[shape[i][0]][shape[i][1]] = 1; //block to stay in grid
+    }
+
+
+    int yDown = 0;      //shift blocks down on full line
+    for(int y = gridY; y > 0; y--){
+        int sum=0;
+        for(int x = 0; x < gridX; x++){
+//            grid[x][y] = grid[x][y - yDown];    //this does not work
+            sum += grid[x][y];
+        }
+        if(sum == gridX){
+            for(int x = 0; x < gridX; x++){
+                grid[x][y] = 0;
+            }
+            yDown ++;
+        }
+
+        for(int y2 = y; y2 > 0; y2 --){
+            for(int x2 = 0; x2 < gridX; x2++){
+                grid[x2][y2] = grid[x2][y2 - yDown];    //this does not work
+            }
+        }
+    }
+
+}
+//--------------------------------------------------------------
 int nShape = 0;
 void Tetris::nextShape(){
     position[0] = gridX /2;
     position[1] = 0;
     for(int i = 0; i < 4; i ++){
-        grid[shape[i][0]][shape[i][1]] = 1; //block to stay
-
         phantomShape[i][0] = line[i][0];
         phantomShape[i][1] = line[i][1];
 
@@ -152,10 +139,12 @@ void Tetris::move(int dir){
             }
 
             if(detectCollision()){
+                sitShape();
                 nextShape();
                 reset();
             }
             else{
+                sitShape();
                 nextShape();
             }
         }

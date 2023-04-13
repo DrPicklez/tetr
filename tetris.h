@@ -21,6 +21,7 @@ public:
     bool detectCollision();
     void nextShape();
     void reset();
+    void sitShape();
 
     int gridX = 10;
     int gridY = 20;
