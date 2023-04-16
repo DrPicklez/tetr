@@ -4,13 +4,7 @@ void Tetris::setup(){
     reset();
     nShape = int(ofRandom(0, 4));
     nextShape(nShape);
-
-
-    //shapes.push_back(square);
-    //shapes.push_back(el);
-    //shapes.push_back(le);
-    //shapes.push_back(ze);
-}   //
+}
 //--------------------------------------------------------------
 bool Tetris::detectCollision(){
     for(auto block : shape){
