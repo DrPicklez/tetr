@@ -14,7 +14,6 @@ class Tetris
 {
 public:
     void setup();
-    void rotate();
     void draw();
     void move(int dir);
     void update();
@@ -34,13 +33,32 @@ public:
     int position[2];
     int blocker;
 
-    int square [4][2] = {1, 1, 2, 1, 1, 2, 2, 2};
-    int line[4][2] = {2, 0, 2, 1, 2, 2, 2, 3};
-    int ez [4][2] = {0, 1, 1, 1, 1, 0, 2, 0};
-    int ze [4][2] = {0, 0, 1, 0, 1, 1, 2, 1};
-    int el [4][2] = {0, 0, 0, 1, 1, 1, 2, 1};
+    int shapes[5][4][2] = {1, 1, 2, 1, 1, 2, 2, 2,
+                         2, 0, 2, 1, 2, 2, 2, 3,
+                         1, 2, 2, 2, 2, 1, 3, 1,
+                         1, 1, 2, 1, 2, 2, 3, 2,
+                         1, 1, 1, 2, 2, 2, 3, 2
+                        };
+
+    //int square [4][2] = {1, 1, 2, 1, 1, 2, 2, 2};
+    //int line[4][2] = {2, 0, 2, 1, 2, 2, 2, 3};
+    //int ez [4][2] = {1, 2, 2, 2, 2, 1, 3, 1};
+    //int ze [4][2] = {1, 1, 2, 1, 2, 2, 3, 2};
+    //int el [4][2] = {1, 1, 1, 2, 2, 2, 3, 2};
+
+    /*
+
+     * OOOOO
+     * OIOOO
+     * OIIIO
+     * OOOOO
+     * OOOOO
+     *
+     */
+
+
     int le [4][2] = {2, 0, 0, 1, 1, 1, 2, 1};
-    vector<int*> shapes;
+
 
 
 //    int lle [4][2] = {1, 0, 1, 1, 1, 1, 1, 2};

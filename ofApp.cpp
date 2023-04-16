@@ -33,7 +33,7 @@ void ofApp::keyPressed(int key){
         tetris.move(TETRIS_MOVE_RIGHT);
     }
     else if(key == OF_KEY_UP){
-        tetris.rotate();
+        tetris.move(TETRIS_ROTATE);
     }
     controlBlock = 0;
 
