@@ -5,12 +5,13 @@ void ofApp::setup(){
     tetris.setup();
 
 
+
 }
 //--------------------------------------------------------------
 uint64_t times = 0;
 void ofApp::update(){
     if(!controlBlock){
-        if(ofGetElapsedTimeMillis() > times + 100){
+        if(ofGetElapsedTimeMillis() > times + 200){
             times = ofGetElapsedTimeMillis();
             tetris.update();
         }
@@ -25,17 +26,23 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    controlBlock = 1;
+    //ofKeyEventArgs
+//    controlBlock = 1;
     if(key == OF_KEY_LEFT){
         tetris.move(TETRIS_MOVE_LEFT);
     }
     else if(key == OF_KEY_RIGHT){
         tetris.move(TETRIS_MOVE_RIGHT);
+//        cout << "RIGHT" << endl;
     }
     else if(key == OF_KEY_UP){
         tetris.move(TETRIS_ROTATE);
     }
-    controlBlock = 0;
+    else if(key == OF_KEY_DOWN){
+//        cout << "DOWN  " << endl;
+        tetris.move(TETRIS_MOVE_DOWN);
+    }
+//    controlBlock = 0;
 
 }
 

@@ -2,7 +2,8 @@
 //--------------------------------------------------------------
 void Tetris::setup(){
     reset();
-    nextShape();
+    nShape = int(ofRandom(0, 4));
+    nextShape(nShape);
 
 
     //shapes.push_back(square);
@@ -61,20 +62,27 @@ void Tetris::sitShape(){
     }
 
 }
-//--------------------------------------------------------------
-int nShape = 0;
-void Tetris::nextShape(){
-    nShape = int(ofRandom(0, 4));
-    position[0] = gridX /2;
-    position[1] = 0;
-    for(int i = 0; i < 4; i ++){
-        phantomShape[i][0] = shapes[nShape][i][0];
-        phantomShape[i][1] = shapes[nShape][i][1];
 
-        shape[i][0] = phantomShape[i][0] + position[0];
-        shape[i][1] = phantomShape[i][1] + position[1];
-//        shapeGrid[phantomShape[i][0]][phantomShape[i][1]] = true;
+//--------------------------------------------------------------
+void Tetris::nextShape(int currntShape){
+    int rShape = int(ofRandom(0, 4));
+    if(rShape != currntShape){
+        nShape = rShape;
+        position[0] = gridX /2;
+        position[1] = 0;
+        for(int i = 0; i < 4; i ++){
+            phantomShape[i][0] = shapes[nShape][i][0];
+            phantomShape[i][1] = shapes[nShape][i][1];
+
+            shape[i][0] = phantomShape[i][0] + position[0];
+            shape[i][1] = phantomShape[i][1] + position[1];
+    //        shapeGrid[phantomShape[i][0]][phantomShape[i][1]] = true;
+        }
     }
+    else {
+        nextShape(currntShape);
+    }
+
     //nShape ++;
     //nShape = nShape % shapes.size();
 }
@@ -101,7 +109,6 @@ void Tetris::draw(){
     }
 }
 //--------------------------------------------------------------
-
 void Tetris::move(int dir){
 //    cout << dir << endl;
     switch(dir){
@@ -120,12 +127,12 @@ void Tetris::move(int dir){
 
             if(detectCollision()){
                 sitShape();
-                nextShape();
+                nextShape(nShape);
                 reset();
             }
             else{
                 sitShape();
-                nextShape();
+                nextShape(nShape);
             }
         }
         break;

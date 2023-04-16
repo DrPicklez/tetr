@@ -18,7 +18,7 @@ public:
     void move(int dir);
     void update();
     bool detectCollision();
-    void nextShape();
+    void nextShape(int currntShape);
     void reset();
     void sitShape();
 
@@ -34,11 +34,12 @@ public:
     int blocker;
 
     int shapes[5][4][2] = {1, 1, 2, 1, 1, 2, 2, 2,
-                         2, 0, 2, 1, 2, 2, 2, 3,
-                         1, 2, 2, 2, 2, 1, 3, 1,
-                         1, 1, 2, 1, 2, 2, 3, 2,
-                         1, 1, 1, 2, 2, 2, 3, 2
+                           2, 0, 2, 1, 2, 2, 2, 3,
+                           1, 2, 2, 2, 2, 1, 3, 1,
+                           1, 1, 2, 1, 2, 2, 3, 2,
+                           1, 1, 1, 2, 2, 2, 3, 2
                         };
+    int nShape = 0;
 
     //int square [4][2] = {1, 1, 2, 1, 1, 2, 2, 2};
     //int line[4][2] = {2, 0, 2, 1, 2, 2, 2, 3};
