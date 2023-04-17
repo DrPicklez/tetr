@@ -64,8 +64,8 @@ void Tetris::nextShape(int currntShape){
         position[0] = gridX /2;
         position[1] = 0;
         for(int i = 0; i < 4; i ++){
-            phantomShape[i][0] = shapes[1][i][0];
-            phantomShape[i][1] = shapes[1][i][1];//////// make 1 nShape <<<< TESTING
+            phantomShape[i][0] = shapes[nShape][i][0];
+            phantomShape[i][1] = shapes[nShape][i][1];//////// make 1 nShape <<<< TESTING
 
             shape[i][0] = phantomShape[i][0] + position[0];
             shape[i][1] = phantomShape[i][1] + position[1];
@@ -82,6 +82,7 @@ void Tetris::nextShape(int currntShape){
 
 //--------------------------------------------------------------
 void Tetris::draw(){
+    ofPushStyle();
     for(int x = 0; x < gridX; x ++){
         for(int y = 0; y < gridY; y ++){
             ofSetColor(ofColor::black);
@@ -98,8 +99,13 @@ void Tetris::draw(){
             int posX = ofGetWidth() / 10;
             int posY = ofGetHeight() / 20;
             ofDrawRectangle(posX * x, posY * y, posX, posY);
+
+            ofNoFill();
+            ofSetColor(ofColor::black);
+            ofDrawRectangle(posX * x, posY * y, posX, posY);
         }
     }
+    ofPopStyle();
 }
 //--------------------------------------------------------------
 void Tetris::move(int dir){

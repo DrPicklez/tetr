@@ -17,7 +17,7 @@ void ofApp::update(){
             tetris.update();
     }
     /////////////PRESS/////////////////
-    if(ofGetElapsedTimeMillis() > controlTimesOne + 200){
+    if(ofGetElapsedTimeMillis() > controlTimesOne + 100){
             controlTimesOne = ofGetElapsedTimeMillis();
 
             if(cDown == 1){
@@ -57,6 +57,7 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
     //ofKeyEventArgs
 //    controlBlock = 1;
+    controlTimesOne = ofGetElapsedTimeMillis();
     if(key == OF_KEY_LEFT){
         tetris.move(TETRIS_MOVE_LEFT);
         cLeft = 1;
@@ -81,6 +82,7 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
+//    controlTimesTwo = ofGetElapsedTimeMillis();
     if(key == OF_KEY_LEFT){
         cLeft = false;
     }
