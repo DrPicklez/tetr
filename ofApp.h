@@ -24,6 +24,6 @@ public:
 
     Tetris tetris;
     bool controlBlock = 0;
-    int cUp, cDown, cLeft, cRight;
+
 
 };

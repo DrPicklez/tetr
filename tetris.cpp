@@ -19,7 +19,43 @@ bool Tetris::detectCollision(){
 }
 //--------------------------------------------------------------
 void Tetris::update(){
-    move(TETRIS_MOVE_DOWN);
+    currentTime = ofGetElapsedTimeMillis();
+    if(currentTime > blockSpeed + 200){
+            blockSpeed = currentTime;
+            move(TETRIS_MOVE_DOWN);
+    }
+    /////////////PRESS/////////////////
+    if(currentTime > controlTimesPress + 100){
+//        controlTimesHold = currentTime;
+//        controlTimesPress  = currentTime;
+//            if(cDown || cLeft || cRight){
+//                controlTimesHold  = ofGetElapsedTimeMillis();
+//            }
+
+        if(cDown == 1){
+            cDown = 2;
+        }
+        if(cLeft == 1){
+            cLeft = 2;
+        }
+        if(cRight == 1){
+            cRight = 2;
+        }
+    }
+    /////////////HOLD/////////////////
+    if(currentTime > controlTimesHold + 20){
+            controlTimesHold  = currentTime;
+
+            if(cDown == 2){
+                move(TETRIS_MOVE_DOWN);
+            }
+            if(cLeft == 2){
+                move(TETRIS_MOVE_LEFT);
+            }
+            if(cRight == 2){
+                move(TETRIS_MOVE_RIGHT);
+            }
+    }
 }
 //--------------------------------------------------------------
 void Tetris::reset(){
@@ -52,6 +88,7 @@ void Tetris::sitShape(){
         }
 
     }
+//    blockSpeed += 500;
     cout << nFullLines << endl;
 
 }
@@ -60,6 +97,11 @@ void Tetris::sitShape(){
 void Tetris::nextShape(int currntShape){
     int rShape = int(ofRandom(0, 4));
     if(rShape != currntShape){
+        controlTimesHold = currentTime + 500;
+//        cDown = 0;
+//        cLeft = 0;
+//        cRight = 0;
+
         nShape = rShape;
         position[0] = gridX /2;
         position[1] = 0;
@@ -108,12 +150,58 @@ void Tetris::draw(){
     ofPopStyle();
 }
 //--------------------------------------------------------------
+void Tetris::control(int dir, bool onOff){
+    //    cout << dir << endl;
+        switch(dir){
+        case TETRIS_MOVE_DOWN:
+        {
+            if((onOff) && (cDown == 0)){
+                move(TETRIS_MOVE_DOWN);
+                cDown = 1;
+//                cout << "TETRIS_MOVE_DOWN" << onOff << endl;
+            }
+            else if(!onOff){
+                cDown = 0;
+//                cout << "TETRIS_MOVE_DOWN" << onOff << endl;
+            }
+            break;
+        }
+
+        case TETRIS_MOVE_LEFT:
+        {
+            if((onOff) && (cLeft == 0)){
+                move(TETRIS_MOVE_LEFT);
+//                cout << "TETRIS_MOVE_LEFT" << onOff << endl;
+                cLeft = 1;
+            }
+            else if(!onOff){
+                cLeft = 0;
+//                cout << "TETRIS_MOVE_LEFT" << onOff << endl;
+            }
+            break;
+        }
+
+        case TETRIS_MOVE_RIGHT:
+        {
+            if((onOff) && (cRight == 0)){
+//                cout << "TETRIS_MOVE_RIGHT" << onOff << endl;
+                move(TETRIS_MOVE_RIGHT);
+                cRight = 1;
+            }
+            else if(!onOff){
+//                cout << "TETRIS_MOVE_RIGHT" << onOff << endl;
+                cRight = 0;}
+            break;
+        }
+    }
+        controlTimesPress = currentTime;
+}
+//--------------------------------------------------------------
 void Tetris::move(int dir){
 //    cout << dir << endl;
     switch(dir){
     case TETRIS_MOVE_DOWN:
     {
-//        cout << "moving down" << endl;
         position[1] += 1;
         for(int i = 0; i < 4; i ++){
             shape[i][1] = phantomShape[i][1] + position[1];  //y
@@ -134,12 +222,12 @@ void Tetris::move(int dir){
                 nextShape(nShape);
             }
         }
+
         break;
     }
 
     case TETRIS_MOVE_LEFT:
     {
-//        cout << "moving left" << endl;
         position[0] -= 1;
         for(int i = 0; i < 4; i ++){
             shape[i][0] = phantomShape[i][0] + position[0];  //y

@@ -8,43 +8,8 @@ void ofApp::setup(){
 
 }
 //--------------------------------------------------------------
-uint64_t updateTimes = 0;
-uint64_t controlTimesOne = 0;
-uint64_t controlTimesTwo = 0;
 void ofApp::update(){
-    if(ofGetElapsedTimeMillis() > updateTimes + 200){
-            updateTimes = ofGetElapsedTimeMillis();
-            tetris.update();
-    }
-    /////////////PRESS/////////////////
-    if(ofGetElapsedTimeMillis() > controlTimesOne + 100){
-            controlTimesOne = ofGetElapsedTimeMillis();
-
-            if(cDown == 1){
-                cDown = 2;
-            }
-            if(cLeft == 1){
-                cLeft = 2;
-            }
-            if(cRight == 1){
-                cRight = 2;
-            }
-    }
-    /////////////HOLD/////////////////
-    if(ofGetElapsedTimeMillis() > controlTimesTwo + 50){
-            controlTimesTwo = ofGetElapsedTimeMillis();
-
-            if(cDown == 2){
-                tetris.move(TETRIS_MOVE_DOWN);
-            }
-            if(cLeft == 2){
-                tetris.move(TETRIS_MOVE_LEFT);
-            }
-            if(cRight == 2){
-                tetris.move(TETRIS_MOVE_RIGHT);
-            }
-    }
-
+    tetris.update();
 }
 
 //--------------------------------------------------------------
@@ -55,47 +20,33 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    //ofKeyEventArgs
-//    controlBlock = 1;
-    controlTimesOne = ofGetElapsedTimeMillis();
     if(key == OF_KEY_LEFT){
-        tetris.move(TETRIS_MOVE_LEFT);
-        cLeft = 1;
+        tetris.control(TETRIS_MOVE_LEFT, true);
     }
     else if(key == OF_KEY_RIGHT){
-        tetris.move(TETRIS_MOVE_RIGHT);
-        cRight = 1;
-//        cout << "RIGHT" << endl;
+        tetris.control(TETRIS_MOVE_RIGHT, true);
+    }
+    else if(key == OF_KEY_DOWN){
+        tetris.control(TETRIS_MOVE_DOWN, true);
     }
     else if(key == OF_KEY_UP){
         tetris.move(TETRIS_ROTATE);
-//        cUp = true;
     }
-    else if(key == OF_KEY_DOWN){
-//        cout << "DOWN  " << endl;
-        tetris.move(TETRIS_MOVE_DOWN);
-        cDown = 1;
-    }
-//    controlBlock = 0;
+
 
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-//    controlTimesTwo = ofGetElapsedTimeMillis();
     if(key == OF_KEY_LEFT){
-        cLeft = false;
+        tetris.control(TETRIS_MOVE_LEFT, false);
     }
     else if(key == OF_KEY_RIGHT){
-        cRight = false;
-    }
-    else if(key == OF_KEY_UP){
-        cUp = false;
+        tetris.control(TETRIS_MOVE_RIGHT, false);
     }
     else if(key == OF_KEY_DOWN){
-        cDown = false;
+        tetris.control(TETRIS_MOVE_DOWN, false);
     }
-
 }
 
 //--------------------------------------------------------------

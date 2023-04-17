@@ -21,6 +21,7 @@ public:
     void nextShape(int currntShape);
     void reset();
     void sitShape();
+    void control(int dir, bool onOff);
 
     int gridX = 10;
     int gridY = 20;
@@ -40,6 +41,8 @@ public:
                            1, 1, 1, 2, 2, 2, 3, 2
                         };
     int nShape = 0;
+    int cUp, cDown, cLeft, cRight;
+    uint64_t blockSpeed, controlTimesPress, controlTimesHold, currentTime;
 
     //int square [4][2] = {1, 1, 2, 1, 1, 2, 2, 2};
     //int line[4][2] = {2, 0, 2, 1, 2, 2, 2, 3};
