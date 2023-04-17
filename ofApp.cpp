@@ -17,7 +17,7 @@ void ofApp::update(){
             tetris.update();
     }
     /////////////PRESS/////////////////
-    if(ofGetElapsedTimeMillis() > controlTimesOne + 300){
+    if(ofGetElapsedTimeMillis() > controlTimesOne + 200){
             controlTimesOne = ofGetElapsedTimeMillis();
 
             if(cDown == 1){

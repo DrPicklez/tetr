@@ -34,26 +34,25 @@ void Tetris::sitShape(){
     for(int i = 0; i < 4; i ++){
         grid[shape[i][0]][shape[i][1]] = 1; //block to stay in grid
     }
-    int yDown = 0;      //shift blocks down on full line
-    for(int y = gridY; y > 0; y--){
+
+    int nFullLines = 0;
+    for(int y = gridY; y > 0; y--){     //check lines to shift down
         int sum=0;
         for(int x = 0; x < gridX; x++){
-//            grid[x][y] = grid[x][y - yDown];    //this does not work
             sum += grid[x][y];
         }
         if(sum == gridX){
-            for(int x = 0; x < gridX; x++){
-                grid[x][y] = 0;
+            for(int y2 = y; y2 > 1; y2 --){
+                for(int x= 0; x < gridX; x++){
+                    grid[x][y2] = grid[x][y2 - 1];
+                }
             }
-            yDown ++;
+            y = y +1;   //check back over shifted shapes (it was missing on multiple lines)
+            nFullLines ++;
         }
 
-        for(int y2 = y; y2 > 0; y2 --){
-            for(int x2 = 0; x2 < gridX; x2++){
-                grid[x2][y2] = grid[x2][y2 - yDown];    //this does not work
-            }
-        }
     }
+    cout << nFullLines << endl;
 
 }
 
@@ -65,8 +64,8 @@ void Tetris::nextShape(int currntShape){
         position[0] = gridX /2;
         position[1] = 0;
         for(int i = 0; i < 4; i ++){
-            phantomShape[i][0] = shapes[nShape][i][0];
-            phantomShape[i][1] = shapes[nShape][i][1];
+            phantomShape[i][0] = shapes[1][i][0];
+            phantomShape[i][1] = shapes[1][i][1];//////// make 1 nShape <<<< TESTING
 
             shape[i][0] = phantomShape[i][0] + position[0];
             shape[i][1] = phantomShape[i][1] + position[1];
