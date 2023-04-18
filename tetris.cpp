@@ -20,41 +20,49 @@ bool Tetris::detectCollision(){
 //--------------------------------------------------------------
 void Tetris::update(){
     currentTime = ofGetElapsedTimeMillis();
-    if(currentTime > blockSpeed + 200){
-            blockSpeed = currentTime;
-            move(TETRIS_MOVE_DOWN);
+    if(currentTime > blockTime + blockSpeed){
+            blockTime = currentTime;
+            if(cDown == 0){
+                move(TETRIS_MOVE_DOWN);
+            }
     }
-    /////////////PRESS/////////////////
-    if(currentTime > controlTimesPress + 100){
-//        controlTimesHold = currentTime;
-//        controlTimesPress  = currentTime;
-//            if(cDown || cLeft || cRight){
-//                controlTimesHold  = ofGetElapsedTimeMillis();
-//            }
-
+    /////////////PRESS/////////////////     add seperate control presses
+    if(currentTime > controlTimesPressD + blockSpeed/2){
+        controlTimesPressD = currentTime;
         if(cDown == 1){
             cDown = 2;
         }
+    }
+    if(currentTime > controlTimesPressL + blockSpeed/2){
+        controlTimesPressL = currentTime;
         if(cLeft == 1){
             cLeft = 2;
         }
+    }
+    if(currentTime > controlTimesPressR + blockSpeed/2){
+        controlTimesPressR = currentTime;
         if(cRight == 1){
             cRight = 2;
         }
     }
     /////////////HOLD/////////////////
-    if(currentTime > controlTimesHold + 20){
-            controlTimesHold  = currentTime;
-
-            if(cDown == 2){
-                move(TETRIS_MOVE_DOWN);
-            }
-            if(cLeft == 2){
-                move(TETRIS_MOVE_LEFT);
-            }
-            if(cRight == 2){
-                move(TETRIS_MOVE_RIGHT);
-            }
+    if(currentTime > controlTimesHoldD + blockSpeed/4){
+        controlTimesHoldD  = currentTime;
+        if(cDown == 2){
+            move(TETRIS_MOVE_DOWN);
+        }
+    }
+    if(currentTime > controlTimesHoldL + blockSpeed/4){
+        controlTimesHoldL = currentTime;
+        if(cLeft == 2){
+            move(TETRIS_MOVE_LEFT);
+        }
+    }
+    if(currentTime > controlTimesHoldR + blockSpeed/4){
+        controlTimesHoldR = currentTime;
+        if(cRight == 2){
+            move(TETRIS_MOVE_RIGHT);
+        }
     }
 }
 //--------------------------------------------------------------
@@ -89,7 +97,7 @@ void Tetris::sitShape(){
 
     }
 //    blockSpeed += 500;
-    cout << nFullLines << endl;
+//    cout << nFullLines << endl;
 
 }
 
@@ -97,7 +105,9 @@ void Tetris::sitShape(){
 void Tetris::nextShape(int currntShape){
     int rShape = int(ofRandom(0, 4));
     if(rShape != currntShape){
-        controlTimesHold = currentTime + 500;
+        controlTimesHoldD = currentTime + 250;
+        controlTimesHoldL = currentTime + 250;
+        controlTimesHoldR = currentTime + 250;
 //        cDown = 0;
 //        cLeft = 0;
 //        cRight = 0;
@@ -157,6 +167,7 @@ void Tetris::control(int dir, bool onOff){
         {
             if((onOff) && (cDown == 0)){
                 move(TETRIS_MOVE_DOWN);
+                controlTimesPressD = currentTime;
                 cDown = 1;
 //                cout << "TETRIS_MOVE_DOWN" << onOff << endl;
             }
@@ -172,6 +183,7 @@ void Tetris::control(int dir, bool onOff){
             if((onOff) && (cLeft == 0)){
                 move(TETRIS_MOVE_LEFT);
 //                cout << "TETRIS_MOVE_LEFT" << onOff << endl;
+                controlTimesPressL = currentTime;
                 cLeft = 1;
             }
             else if(!onOff){
@@ -186,6 +198,7 @@ void Tetris::control(int dir, bool onOff){
             if((onOff) && (cRight == 0)){
 //                cout << "TETRIS_MOVE_RIGHT" << onOff << endl;
                 move(TETRIS_MOVE_RIGHT);
+                controlTimesPressR = currentTime;
                 cRight = 1;
             }
             else if(!onOff){
@@ -194,7 +207,6 @@ void Tetris::control(int dir, bool onOff){
             break;
         }
     }
-        controlTimesPress = currentTime;
 }
 //--------------------------------------------------------------
 void Tetris::move(int dir){

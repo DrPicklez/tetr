@@ -32,6 +32,9 @@ void ofApp::keyPressed(int key){
     else if(key == OF_KEY_UP){
         tetris.move(TETRIS_ROTATE);
     }
+    else if(key == OF_KEY_CONTROL){
+        tetris.blockSpeed -= 10;
+    }
 
 
 }

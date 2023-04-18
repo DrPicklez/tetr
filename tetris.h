@@ -42,7 +42,9 @@ public:
                         };
     int nShape = 0;
     int cUp, cDown, cLeft, cRight;
-    uint64_t blockSpeed, controlTimesPress, controlTimesHold, currentTime;
+    int blockSpeed = 400;
+    bool sSitShape;
+    uint64_t blockTime, controlTimesPressD, controlTimesPressL, controlTimesPressR, controlTimesHoldD, controlTimesHoldL, controlTimesHoldR, currentTime;
 
     //int square [4][2] = {1, 1, 2, 1, 1, 2, 2, 2};
     //int line[4][2] = {2, 0, 2, 1, 2, 2, 2, 3};
