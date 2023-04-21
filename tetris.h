@@ -30,33 +30,40 @@ public:
     int phantomShape[4][2] = {0, 0, 0, 1, 1, 1, 2, 1};
     int resetShape [4][2] = {0, 0, 0, 1, 0, 2, 0, 3};
 
-    ofFbo shapeFbo;
+    ofFbo tetrisFBO;
     int position[2];
     int blocker;
 
-    int shapes[5][4][2] = {1, 1, 2, 1, 1, 2, 2, 2,
+    int shapes[7][4][2] = {1, 1, 2, 1, 1, 2, 2, 2,
                            2, 0, 2, 1, 2, 2, 2, 3,
                            1, 2, 2, 2, 2, 1, 3, 1,
                            1, 1, 2, 1, 2, 2, 3, 2,
-                           1, 1, 1, 2, 2, 2, 3, 2
+                           1, 1, 1, 2, 2, 2, 3, 2,
+                           2, 1, 1, 2, 2, 2, 3, 2,
+                           3, 1, 1, 2, 2, 2, 3, 2
                         };
     int nShape = 0;
     int cUp, cDown, cLeft, cRight;
-    int blockSpeed = 400;
-    bool sSitShape;
-    uint64_t blockTime, controlTimesPressD, controlTimesPressL, controlTimesPressR, controlTimesHoldD, controlTimesHoldL, controlTimesHoldR, currentTime;
+    int blockSpeed = 200;
+    bool satDown;
+
+    uint64_t blockTime, controlTimesPressD,
+    controlTimesPressL, controlTimesPressR,
+    controlTimesHoldD, controlTimesHoldL,
+    controlTimesHoldR, currentTime;
 
     //int square [4][2] = {1, 1, 2, 1, 1, 2, 2, 2};
     //int line[4][2] = {2, 0, 2, 1, 2, 2, 2, 3};
     //int ez [4][2] = {1, 2, 2, 2, 2, 1, 3, 1};
     //int ze [4][2] = {1, 1, 2, 1, 2, 2, 3, 2};
     //int el [4][2] = {1, 1, 1, 2, 2, 2, 3, 2};
+    //int le [4][2] = {3, 1, 1, 2, 2, 2, 3, 2};
 
     /*
 
      * OOOOO
-     * OIOOO
-     * OIIIO
+     * O01OO
+     * O111O
      * OOOOO
      * OOOOO
      *

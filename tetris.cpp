@@ -22,7 +22,7 @@ void Tetris::update(){
     currentTime = ofGetElapsedTimeMillis();
     if(currentTime > blockTime + blockSpeed){
             blockTime = currentTime;
-            if(cDown == 0){
+            if((cDown == 0) || (satDown)){
                 move(TETRIS_MOVE_DOWN);
             }
     }
@@ -48,7 +48,7 @@ void Tetris::update(){
     /////////////HOLD/////////////////
     if(currentTime > controlTimesHoldD + blockSpeed/4){
         controlTimesHoldD  = currentTime;
-        if(cDown == 2){
+        if((cDown == 2) && (!satDown)){
             move(TETRIS_MOVE_DOWN);
         }
     }
@@ -103,7 +103,7 @@ void Tetris::sitShape(){
 
 //--------------------------------------------------------------
 void Tetris::nextShape(int currntShape){
-    int rShape = int(ofRandom(0, 4));
+    int rShape = int(ofRandom(0, 7));
     if(rShape != currntShape){
         controlTimesHoldD = currentTime + 250;
         controlTimesHoldL = currentTime + 250;
@@ -135,9 +135,12 @@ void Tetris::nextShape(int currntShape){
 //--------------------------------------------------------------
 void Tetris::draw(){
     ofPushStyle();
+
+    int posX = ofGetWidth() / 10;
+    int posY = ofGetHeight() / 20;
     for(int x = 0; x < gridX; x ++){
         for(int y = 0; y < gridY; y ++){
-            ofSetColor(ofColor::black);
+            ofSetColor(ofColor::yellow);
             ofNoFill();
             for(auto block : shape){
                 if(x == block[0] && y == block[1]){
@@ -145,12 +148,12 @@ void Tetris::draw(){
                 }
             }
             if(grid[x][y]){
-                ofSetColor(ofColor::white);
+                ofSetColor(ofColor::purple);
                 ofFill();
             }
-            int posX = ofGetWidth() / 10;
-            int posY = ofGetHeight() / 20;
+
             ofDrawRectangle(posX * x, posY * y, posX, posY);
+
 
             ofNoFill();
             ofSetColor(ofColor::black);
@@ -165,7 +168,7 @@ void Tetris::control(int dir, bool onOff){
         switch(dir){
         case TETRIS_MOVE_DOWN:
         {
-            if((onOff) && (cDown == 0)){
+            if((onOff) && (cDown == 0) && (!satDown)){
                 move(TETRIS_MOVE_DOWN);
                 controlTimesPressD = currentTime;
                 cDown = 1;
@@ -223,15 +226,20 @@ void Tetris::move(int dir){
             for(int i = 0; i < 4; i ++){
                 shape[i][1] = phantomShape[i][1] + position[1];  //y
             }
+            if(satDown){    //flip** to allow final move once hit floor
+                sitShape();
+                nextShape(nShape);
+                satDown = false;
+                break;
+            }
 
-            if(detectCollision()){
+            if(detectCollision()){  //hit the top
                 sitShape();
                 nextShape(nShape);
                 reset();
             }
             else{
-                sitShape();
-                nextShape(nShape);
+                satDown = true; //flop**
             }
         }
 

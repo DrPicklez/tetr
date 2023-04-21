@@ -2,6 +2,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    ofEnableAlphaBlending();
+    ofSetBackgroundAuto(false);
     tetris.setup();
 
 
@@ -14,8 +16,19 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    tetris.draw();
 
+    ofPushStyle();
+    ofFill();
+    if((tetris.cDown == 2) || (tetris.cLeft == 2) || (tetris.cRight == 2)){
+        ofSetColor(ofColor::black, 85);
+    }
+    else {
+        ofSetColor(ofColor::black, 255);
+    }
+    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight()); // motion
+    ofPopStyle();
+
+    tetris.draw();
 }
 
 //--------------------------------------------------------------
