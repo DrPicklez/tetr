@@ -1,6 +1,12 @@
 #include "tetris.h"
 //--------------------------------------------------------------
-void Tetris::setup(){
+void Tetris::setup(int width, int height){
+    tetrisFBO.allocate(width, height, GL_RGBA);
+    ttf.load("ARCADECLASSIC.TTF", 32);
+    tetrisScoreFBO.allocate(ttf.getSize() * 6, ttf.getSize() + 5, GL_RGBA);
+
+
+//    ofClear(255,255,255, 0);
     reset();
     nShape = int(ofRandom(0, 4));
     nextShape(nShape);
@@ -98,6 +104,7 @@ void Tetris::sitShape(){
     }
 //    blockSpeed += 500;
 //    cout << nFullLines << endl;
+    score += nFullLines;
 
 }
 
@@ -108,9 +115,6 @@ void Tetris::nextShape(int currntShape){
         controlTimesHoldD = currentTime + 250;
         controlTimesHoldL = currentTime + 250;
         controlTimesHoldR = currentTime + 250;
-//        cDown = 0;
-//        cLeft = 0;
-//        cRight = 0;
 
         nShape = rShape;
         position[0] = gridX /2;
@@ -121,7 +125,6 @@ void Tetris::nextShape(int currntShape){
 
             shape[i][0] = phantomShape[i][0] + position[0];
             shape[i][1] = phantomShape[i][1] + position[1];
-    //        shapeGrid[phantomShape[i][0]][phantomShape[i][1]] = true;
         }
     }
     else {
@@ -133,11 +136,48 @@ void Tetris::nextShape(int currntShape){
 }
 
 //--------------------------------------------------------------
-void Tetris::draw(){
+void Tetris::drawScore(int x, int y, int wid, int hig){
+    tetrisScoreFBO.begin();
+    ofPushStyle();
+//    ofDisableSmoothing();
+    ofBackground(ofColor::purple);
+
+    ofSetColor(ofColor::yellow);
+    string original_string = ofToString(score);
+    int leadingZeros = score / 10;
+    std::string dest = std::string( 6 - leadingZeros, '0').append( original_string);
+    ttf.drawString(dest, 0, ttf.getSize());
+    ofPopStyle();
+    tetrisScoreFBO.end();
+
+    ofPushStyle();
+////    ofDisableSmoothing();
+////    ofDisableAntiAliasing();
+////    ofDisableTextureEdgeHack();
+    ofSetRectMode(OF_RECTMODE_CORNER);
+    tetrisScoreFBO.draw(x, y);
+
+    ofPopStyle();
+}
+//--------------------------------------------------------------
+void Tetris::draw(int x, int y, int wid, int hig){
+    tetrisFBO.begin();
+    ofPushStyle();
+//    ofClear(255,255,255, 0);
+    ofFill();
+    if((cDown == 2) || (cLeft == 2) || (cRight == 2)){
+        ofSetColor(ofColor::black, 85);
+    }
+    else {
+        ofSetColor(ofColor::black, 255);
+    }
+    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight()); // motion
+    ofPopStyle();
+
     ofPushStyle();
 
-    int posX = ofGetWidth() / 10;
-    int posY = ofGetHeight() / 20;
+    int posX = tetrisFBO.getWidth() / 10;
+    int posY = tetrisFBO.getHeight()/ 20;
     for(int x = 0; x < gridX; x ++){
         for(int y = 0; y < gridY; y ++){
             ofSetColor(ofColor::yellow);
@@ -161,6 +201,9 @@ void Tetris::draw(){
         }
     }
     ofPopStyle();
+    tetrisFBO.end();
+
+    tetrisFBO.draw(x, y, wid, hig);
 }
 //--------------------------------------------------------------
 void Tetris::control(int dir, bool onOff){

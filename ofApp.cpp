@@ -4,7 +4,8 @@
 void ofApp::setup(){
     ofEnableAlphaBlending();
     ofSetBackgroundAuto(false);
-    tetris.setup();
+    tetris.setup(ofGetWidth(), ofGetHeight());
+    ofBackground(ofColor::purple);
 
 
 
@@ -16,19 +17,8 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
-    ofPushStyle();
-    ofFill();
-    if((tetris.cDown == 2) || (tetris.cLeft == 2) || (tetris.cRight == 2)){
-        ofSetColor(ofColor::black, 85);
-    }
-    else {
-        ofSetColor(ofColor::black, 255);
-    }
-    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight()); // motion
-    ofPopStyle();
-
-    tetris.draw();
+    tetris.draw(0, 0, 250, ofGetHeight());
+    tetris.drawScore(250, 0, 250 + 30, 22);
 }
 
 //--------------------------------------------------------------

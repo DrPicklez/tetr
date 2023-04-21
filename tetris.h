@@ -13,8 +13,9 @@
 class Tetris
 {
 public:
-    void setup();
-    void draw();
+    void setup(int width, int height);
+    void draw(int x, int y, int wid, int hig);
+    void drawScore(int x, int y, int wid, int hig);
     void move(int dir);
     void update();
     bool detectCollision();
@@ -30,9 +31,11 @@ public:
     int phantomShape[4][2] = {0, 0, 0, 1, 1, 1, 2, 1};
     int resetShape [4][2] = {0, 0, 0, 1, 0, 2, 0, 3};
 
-    ofFbo tetrisFBO;
+    ofFbo tetrisFBO, tetrisScoreFBO;
+    ofTrueTypeFont ttf;
     int position[2];
     int blocker;
+    int score;
 
     int shapes[7][4][2] = {1, 1, 2, 1, 1, 2, 2, 2,
                            2, 0, 2, 1, 2, 2, 2, 3,
@@ -58,22 +61,6 @@ public:
     //int ze [4][2] = {1, 1, 2, 1, 2, 2, 3, 2};
     //int el [4][2] = {1, 1, 1, 2, 2, 2, 3, 2};
     //int le [4][2] = {3, 1, 1, 2, 2, 2, 3, 2};
-
-    /*
-
-     * OOOOO
-     * O01OO
-     * O111O
-     * OOOOO
-     * OOOOO
-     *
-     */
-
-
-    int le [4][2] = {2, 0, 0, 1, 1, 1, 2, 1};
-
-
-
 //    int lle [4][2] = {1, 0, 1, 1, 1, 1, 1, 2};
     bool controlBlocker;
 
